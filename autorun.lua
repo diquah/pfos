@@ -12,25 +12,29 @@ local filesystem = component.filesystem
 --=========== NETWORKING ===========--
 
 m.open(1)
-m.setWakeMessage('update_wakeup')
+m.setWakeMessage("update_wakeup")
 
 local function message_handler(_, _, from, port, _, ...)
   local args = {...}
-
-  if args[1] == 'update_software' then
-    local response = internet.request("https://raw.githubusercontent.com/rubycookinson/pfos/main/autorun.lua")
-    local compiled = ""
-    for chunk in reponse do
-      compiled = compiled .. chunk
+  
+  if args[1] == "update_software" then
+    local handle, data, chunk = internet.request("https://raw.githubusercontent.com/rubycookinson/pfos/main/autorun.lua"), ""
+    while true do
+      chunk = handle.read(math.huge)
+      if chunk then
+          data = data .. chunk
+      else
+          break
+      end
     end
-    local f = filesystem.open('autorun.lua', 'w')
-    f:write()
-    f:close(compiled)
+    local f = io.open("autorun.lua", "w")
+    f:write(data)
+    f:close()
     computer.shutdown(true)
   end
 end
 
-event.listen("modem_message", message_handler)
+mh_listener = event.listen("modem_message", message_handler)
 
 --=========== TERMINAL ===========--
 
@@ -62,5 +66,7 @@ while true do
     term.setCursor(1, 3)
   end
 end
+
+event.ignore("modem_message", message_handler)
 
 term.clear()
