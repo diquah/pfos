@@ -25,7 +25,7 @@ local function message_handler(_, _, from, port, _, ...)
     end
     local f = filesystem.open('autorun.lua', 'w')
     f:write()
-    f:close()
+    f:close(compiled)
     computer.shutdown(true)
   end
 end
