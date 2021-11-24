@@ -2,10 +2,12 @@ local event = require("event")
 local colors = require("colors")
 local term = require("term")
 local internet = require("internet")
+local computer = require("computer")
 
 component = require("component")
 local gpu = component.gpu
 local m = component.modem
+local filesystem = component.filesystem
 
 --=========== NETWORKING ===========--
 
@@ -16,7 +18,15 @@ local function message_handler(_, _, from, port, _, ...)
   local args = {...}
 
   if args[1] == 'update_software' then
-    local handle = internet.request("")
+    local response = internet.request("https://raw.githubusercontent.com/rubycookinson/pfos/main/autorun.lua")
+    local compiled = ""
+    for chunk in reponse do
+      compiled = compiled .. chunk
+    end
+    local f = filesystem.open('autorun.lua', 'w')
+    f:write()
+    f:close()
+    computer.shutdown(true)
   end
 end
 
