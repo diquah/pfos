@@ -68,5 +68,5 @@ while true do
 end
 
 event.ignore("modem_message", message_handler)
-
+m.close(1)
 term.clear()
