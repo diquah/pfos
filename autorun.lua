@@ -28,6 +28,7 @@ end
 
 local function update_all()
   download_and_save("autorun.lua", "https://raw.githubusercontent.com/rubycookinson/pfos/main/autorun.lua")
+  download_and_save("ac.lua", "https://raw.githubusercontent.com/rubycookinson/pfos/main/ac.lua")
 end
 
 m.open(1)
